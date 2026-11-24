@@ -1,0 +1,12 @@
+{
+  "id": "com.tvdrop.app",
+  "version": "0.1.0",
+  "vendor": "Personal",
+  "type": "web",
+  "main": "index.html",
+  "title": "TV Drop",
+  "icon": "icon.png",
+  "largeIcon": "largeIcon.png",
+  "bgColor": "#0e1020",
+  "resolution": "1920x1080"
+}

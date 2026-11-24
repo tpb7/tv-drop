@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e1020">
+<title>Send to TV</title>
+<style>
+  /* Colours live here. Change them once and the whole page follows.  <-- TWEAK */
+  :root {
+    --ink: #0e1020;
+    --panel: #181b33;
+    --line: #2a2e52;
+    --text: #f4f1ea;
+    --soft: #a9adc9;
+    --accent: #ffb547;
+    --good: #6ee7c8;
+    --bad: #ff7a7a;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font: 17px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+    display: flex;
+    flex-direction: column;
+    padding: max(24px, env(safe-area-inset-top)) 22px max(24px, env(safe-area-inset-bottom));
+  }
+  header { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--soft); }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--soft); flex: none; }
+  .dot.wait { background: var(--accent); animation: pulse 1.2s ease-in-out infinite; }
+  .dot.good { background: var(--good); }
+  .dot.bad { background: var(--bad); }
+  @keyframes pulse { 50% { opacity: .35; } }
+
+  main { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 22px; }
+  h1 { font-size: 32px; line-height: 1.12; font-weight: 700; margin: 0; letter-spacing: -0.02em; }
+  p { margin: 0; color: var(--soft); }
+
+  .preview {
+    width: 100%; aspect-ratio: 4 / 3; border-radius: 18px; overflow: hidden;
+    background: var(--panel); border: 1px solid var(--line);
+    display: none; position: relative;
+  }
+  .preview img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .preview .badge {
+    position: absolute; left: 12px; bottom: 12px; padding: 6px 12px; border-radius: 999px;
+    background: rgba(14,16,32,.82); font-size: 14px; color: var(--text);
+  }
+
+  .bar { height: 8px; border-radius: 999px; background: var(--panel); overflow: hidden; display: none; }
+  .bar i { display: block; height: 100%; width: 0%; background: var(--accent); border-radius: 999px; transition: width .2s ease; }
+
+  button.big {
+    appearance: none; border: 0; width: 100%; padding: 20px; border-radius: 18px;
+    background: var(--accent); color: #23180a; font: inherit; font-size: 19px; font-weight: 700;
+  }
+  button.big:active { transform: scale(.985); }
+  button.big[disabled] { opacity: .45; }
+  input[type=file] { display: none; }
+  footer { font-size: 13px; color: var(--soft); text-align: center; opacity: .8; }
+
+  /* The page shows one "state" at a time; app code flips the body class. */
+  body.state-nolink #pick, body.state-sending #pick { display: none; }
+  body.state-sending .bar { display: block; }
+  body.has-photo .preview { display: block; }
+</style>
+</head>
+<body class="state-connecting">
+  <header><span class="dot wait" id="dot"></span><span id="status">Connecting…</span></header>
+
+  <main>
+    <div>
+      <h1 id="title">Send a photo to the TV</h1>
+      <p id="hint" style="margin-top:10px">Pick a photo and it shows up on the big screen.</p>
+    </div>
+
+    <div class="preview"><img id="thumb" alt="The photo you picked"><span class="badge" id="badge"></span></div>
+    <div class="bar"><i id="fill"></i></div>
+
+    <button class="big" id="pick" disabled>Choose a photo</button>
+    <input type="file" id="file" accept="image/*">
+  </main>
+
+  <footer>Photos go straight to the TV. Nothing is saved online.</footer>
+
+  <script src="supabase.js"></script>
+  <script src="relay.js"></script>
+  <script src="phone.js"></script>
+</body>
+</html>
