@@ -8,5 +8,6 @@
   "icon": "icon.png",
   "largeIcon": "largeIcon.png",
   "bgColor": "#0e1020",
-  "resolution": "1920x1080"
+  "resolution": "1920x1080",
+  "requiredACG": []
 }
